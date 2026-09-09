@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: setu_user
+      POSTGRES_PASSWORD: setu_pass
+      POSTGRES_DB: setu_ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - setu_pgdata:/var/lib/postgresql/data
+
+volumes:
+  setu_pgdata:

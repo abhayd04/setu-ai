@@ -1,0 +1,117 @@
+[
+  {
+    "partner_id": "sca_mp_indore",
+    "name": "MP Backward Classes Finance & Development Corporation (SCA) - Indore Branch",
+    "partner_type": "SCA",
+    "lat": 22.7196,
+    "lng": 75.8577,
+    "district": "Indore",
+    "authorized_schemes": [
+      "micro_finance_general",
+      "mahila_samriddhi",
+      "new_swarnima_term_loan",
+      "general_term_loan",
+      "shg_group_loan"
+    ],
+    "is_operationally_active": true,
+    "is_simulated_data": true,
+    "metrics": {
+      "capacity_pct": 62,
+      "current_workload": 34,
+      "avg_processing_days": 6.5,
+      "doc_rejection_rate": 0.08,
+      "is_simulated_data": true
+    }
+  },
+  {
+    "partner_id": "psb_sbi_indore_mg_road",
+    "name": "State Bank of India - MG Road Branch, Indore",
+    "partner_type": "PSB",
+    "lat": 22.7167,
+    "lng": 75.8472,
+    "district": "Indore",
+    "authorized_schemes": [
+      "general_term_loan",
+      "education_loan",
+      "new_swarnima_term_loan"
+    ],
+    "is_operationally_active": true,
+    "is_simulated_data": true,
+    "metrics": {
+      "capacity_pct": 38,
+      "current_workload": 61,
+      "avg_processing_days": 11.0,
+      "doc_rejection_rate": 0.15,
+      "is_simulated_data": true
+    }
+  },
+  {
+    "partner_id": "rrb_narmada_jhabua_indore",
+    "name": "Narmada Jhabua Gramin Bank - Indore Branch",
+    "partner_type": "RRB",
+    "lat": 22.6899,
+    "lng": 75.8299,
+    "district": "Indore",
+    "authorized_schemes": [
+      "micro_finance_general",
+      "mahila_samriddhi",
+      "shg_group_loan",
+      "education_loan"
+    ],
+    "is_operationally_active": true,
+    "is_simulated_data": true,
+    "metrics": {
+      "capacity_pct": 71,
+      "current_workload": 19,
+      "avg_processing_days": 5.0,
+      "doc_rejection_rate": 0.05,
+      "is_simulated_data": true
+    }
+  },
+  {
+    "partner_id": "nbfc_mfi_ujjivan_indore",
+    "name": "Ujjivan Small Finance Bank (NBFC-MFI channel) - Indore",
+    "partner_type": "NBFC-MFI",
+    "lat": 22.7532,
+    "lng": 75.8937,
+    "district": "Indore",
+    "authorized_schemes": [
+      "micro_finance_general",
+      "mahila_samriddhi"
+    ],
+    "is_operationally_active": true,
+    "is_simulated_data": true,
+    "metrics": {
+      "capacity_pct": 22,
+      "current_workload": 88,
+      "avg_processing_days": 9.5,
+      "doc_rejection_rate": 0.22,
+      "is_simulated_data": true
+    }
+  },
+  {
+    "partner_id": "sca_mp_bhopal",
+    "name": "MP Backward Classes Finance & Development Corporation (SCA) - Bhopal Branch",
+    "partner_type": "SCA",
+    "lat": 23.2599,
+    "lng": 77.4126,
+    "district": "Bhopal",
+    "authorized_schemes": [
+      "micro_finance_general",
+      "mahila_samriddhi",
+      "new_swarnima_term_loan",
+      "general_term_loan",
+      "shg_group_loan",
+      "education_loan"
+    ],
+    "is_operationally_active": true,
+    "is_simulated_data": true,
+    "metrics": {
+      "capacity_pct": 55,
+      "current_workload": 40,
+      "avg_processing_days": 7.0,
+      "doc_rejection_rate": 0.1,
+      "is_simulated_data": true
+    }
+  }
+]

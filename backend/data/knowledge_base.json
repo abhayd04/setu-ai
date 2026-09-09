@@ -1,0 +1,44 @@
+[
+  {
+    "doc_id": "kb_micro_finance_general",
+    "scheme_id": "micro_finance_general",
+    "title": "Micro Finance Scheme - Eligibility and Process",
+    "text": "The Micro Finance Scheme is for Scheduled Caste beneficiaries starting a small business or income-generating activity. Maximum loan amount is Rs.50,000 at 5% per annum interest, with a 6-month moratorium before repayment begins and a 4-year total tenure. NBCFDC covers 100% of the project cost for loans of this size. Eligibility requires annual family income within the double-poverty-line threshold (approximated here as Rs.3,00,000), SC category certification, and a viable small business proposal. Required documents: identity proof, income certificate, caste certificate, and a brief project proposal. Applications are routed through State Channelizing Agencies (SCAs) or Self Help Groups, not submitted directly to NBCFDC."
+  },
+  {
+    "doc_id": "kb_mahila_samriddhi",
+    "scheme_id": "mahila_samriddhi",
+    "title": "Mahila Samriddhi Yojana - Women's Micro Finance",
+    "text": "Mahila Samriddhi Yojana is NBCFDC's micro finance scheme specifically for women from Scheduled Caste communities. It offers a higher loan ceiling than the general Micro Finance Scheme - up to Rs.1,00,000 - at a concessional rate as low as 4-5% per annum, covering 95% of project cost. This scheme exists because women starting a business often need slightly larger working capital and face additional barriers accessing regular credit channels. Only female applicants are eligible. Same document requirements as the general Micro Finance Scheme: identity proof, income certificate, caste certificate, project proposal."
+  },
+  {
+    "doc_id": "kb_new_swarnima",
+    "scheme_id": "new_swarnima_term_loan",
+    "title": "New Swarnima Scheme - Term Loan for Young Professionals",
+    "text": "New Swarnima is a term loan scheme aimed at young, skilled or professionally-trained SC individuals starting a larger business or enterprise than micro-finance would cover, up to Rs.10,00,000. The interest rate is tiered: 6% per annum on the portion up to Rs.5,00,000, and 8% per annum on the portion between Rs.5,00,000 and Rs.10,00,000. Project cost coverage is 85%. A 6-month moratorium applies before the 5-year repayment period begins. This scheme suits applicants whose project cost and ambition exceed what Micro Finance or Mahila Samriddhi can fund, but who are not yet at the scale of a General Term Loan. Requires identity proof, income certificate, caste certificate, project proposal, and a cost quotation for the proposed enterprise."
+  },
+  {
+    "doc_id": "kb_general_term_loan",
+    "scheme_id": "general_term_loan",
+    "title": "General Term Loan Scheme - Larger Enterprise Financing",
+    "text": "The General Term Loan Scheme funds larger SC-owned businesses and enterprises, up to Rs.50,00,000, covering 90% of project cost. Annual family income must be within Rs.5,00,000. Interest rates for NBCFDC's term loan products typically range from 6.5% to 15% per annum depending on the specific sub-scheme and loan size; this platform uses a representative rate pending final confirmation against the current official schedule. A 12-month moratorium applies before repayment begins over the remaining tenure. This scheme is appropriate for established or scaling businesses needing substantial capital beyond what Micro Finance, Mahila Samriddhi, or New Swarnima can provide. Requires identity proof, income certificate, caste certificate, project proposal, and cost quotation."
+  },
+  {
+    "doc_id": "kb_education_loan",
+    "scheme_id": "education_loan",
+    "title": "Educational Loan Scheme - Higher Education Financing",
+    "text": "NBCFDC's Educational Loan Scheme funds higher education for SC students, up to Rs.25,00,000, covering 90% of admissible course fees and expenses. The interest rate is a uniform 8% per annum. A 5-year moratorium applies - repayment does not begin until 5 years after loan disbursement (typically aligned with course completion plus a settling-in period), and the total repayment window extends to 15 years from disbursement. Annual family income must be within Rs.5,00,000. This scheme is for course fees, not for starting a business - applicants asking about business loans should look at Micro Finance, Mahila Samriddhi, New Swarnima, or General Term Loan instead. Requires identity proof, income certificate, caste certificate, admission letter, and fee structure from the educational institution."
+  },
+  {
+    "doc_id": "kb_shg_group_loan",
+    "scheme_id": "shg_group_loan",
+    "title": "Group Loan Scheme via Self Help Groups",
+    "text": "The Group Loan Scheme channels credit to SC beneficiaries through Self Help Groups (SHGs) rather than individually. Each SHG member can access up to Rs.1,25,000, with the group's total cap at Rs.25,00,000. Interest rate is 7% per annum, project cost coverage is 90%, tenure is 3 years including a 1-quarter (3-month) moratorium. This scheme suits applicants who are already part of, or willing to join, an SHG, and whose income-generating activity is modest enough to fit within the per-member cap. Requires identity proof, income certificate, caste certificate, and proof of SHG membership."
+  },
+  {
+    "doc_id": "kb_channel_partners",
+    "scheme_id": null,
+    "title": "How Channel Partners Work",
+    "text": "NBCFDC does not lend directly to individual beneficiaries. All loans are routed through authorized Channel Partners: State Channelizing Agencies (SCAs) set up by state governments, Public Sector Banks (PSBs), Regional Rural Banks (RRBs), and NBFC-Micro Finance Institutions (NBFC-MFIs). Which partner is appropriate depends on the scheme selected, the partner's authorization for that scheme, their current operational capacity, and their processing track record. This is why simply picking the nearest branch is not always the best choice - a nearby but overloaded or unauthorized partner will process the application more slowly or reject it outright. SETU-AI's partner routing considers authorization, capacity, distance, and processing performance together rather than distance alone."
+  }
+]
