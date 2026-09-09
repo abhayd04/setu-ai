@@ -22,7 +22,7 @@ def _ensure_configured():
         _configured = True
 
 
-def generate_json(prompt: str, model_name: str = "gemini-2.0-flash") -> dict:
+def generate_json(prompt: str, model_name: str = "gemini-3.6-flash") -> dict:
     """
     Calls Gemini with a prompt that demands JSON-only output, and parses it.
     Raises on malformed output rather than silently guessing — callers

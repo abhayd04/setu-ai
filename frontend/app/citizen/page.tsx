@@ -239,7 +239,7 @@ export default function CitizenIntake() {
     }
   }
 
-  const stillMissing = missingFields.filter((f) => !manualValues[f]);
+  const isFormIncomplete = missingFields.some((f) => !manualValues[f] || String(manualValues[f]).trim() === "");
 
   return (
     <main className="min-h-screen px-6 py-10 max-w-2xl mx-auto">
@@ -295,18 +295,22 @@ export default function CitizenIntake() {
             </ul>
           </div>
 
-          {stillMissing.length > 0 && (
+          {missingFields.length > 0 && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
               <p className="text-sm text-yellow-800 mb-3">{t("A few more details will help us find the right scheme:", "सही योजना खोजने के लिए कुछ और जानकारी चाहिए:")}</p>
               <div className="space-y-2">
-                {stillMissing.map((field) => (
+                {missingFields.map((field) => (
                   <input key={field} className="w-full border rounded-lg p-2 text-sm" placeholder={FIELD_LABELS[field]?.[language] || field} onChange={(e) => updateManualField(field, e.target.value)} />
                 ))}
               </div>
             </div>
           )}
 
-          <button className="w-full bg-setu-teal text-white rounded-xl py-3 font-medium disabled:opacity-50" disabled={stillMissing.length > 0 || loading} onClick={handleGetRecommendations}>
+          <button 
+  className="w-full bg-setu-teal text-white rounded-xl py-3 font-medium disabled:opacity-50" 
+  disabled={isFormIncomplete || loading} 
+  onClick={handleGetRecommendations}
+>
             {loading ? t("Finding schemes...", "योजनाएं खोजी जा रही हैं...") : t("Find My Best Scheme", "मेरी सर्वश्रेष्ठ योजना खोजें")}
           </button>
         </div>

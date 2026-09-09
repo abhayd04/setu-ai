@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql://setu_user:setu_pass@localhost:5432/setu_ai"
     GEMINI_API_KEY: str = ""
     ENVIRONMENT: str = "development"
-    CORS_ORIGINS: str = "http://localhost:3000"
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
