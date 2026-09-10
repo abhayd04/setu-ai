@@ -5,3 +5,13 @@
 body {
   background-color: #F7F9FA;
 }
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 text-slate-800 min-h-screen font-sans antialiased;
+  }
+}
+
+/* Glassmorphic card styling for dashboard widgets */
+.setu-card {
+  @apply bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-sm rounded-2xl p-6 transition-all duration-200 hover:shadow-md;
+}

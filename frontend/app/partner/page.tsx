@@ -7,6 +7,7 @@ export default function PartnerDashboard() {
   const [applications, setApplications] = useState<any[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   async function loadApplications() {
     setLoading(true);
@@ -18,6 +19,24 @@ export default function PartnerDashboard() {
       setError(e?.response?.data?.detail || "Could not load applications");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleAction(applicationId: string, action: "approve" | "reject" | "disburse") {
+    setActionLoading(applicationId);
+    setError(null);
+    try {
+      await api.post(`/api/partners/${action}`, {
+        application_id: applicationId,
+        partner_id: partnerId,
+        rejection_reason: action === "reject" ? "Document verification failed or eligibility mismatch" : null,
+      });
+      // Reload applications to reflect new status
+      await loadApplications();
+    } catch (e: any) {
+      setError(e?.response?.data?.detail || `Failed to ${action} application.`);
+    } finally {
+      setActionLoading(null);
     }
   }
 
@@ -56,17 +75,63 @@ export default function PartnerDashboard() {
       {applications && applications.length > 0 && (
         <div className="space-y-3">
           {applications.map((a) => (
-            <div key={a.application_id} className="border rounded-xl p-4">
-              <div className="flex justify-between">
-                <h3 className="font-medium text-setu-navy">{a.applicant_name || "Applicant"}</h3>
-                <span className="text-xs bg-gray-100 rounded-full px-2 py-0.5">{a.status}</span>
+            <div key={a.application_id} className="border rounded-xl p-4 bg-white shadow-sm">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-medium text-setu-navy">{a.applicant_name || "Applicant"}</h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {a.scheme_name} · ₹{a.requested_amount?.toLocaleString("en-IN")}
+                  </p>
+                </div>
+                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                  a.status === "DISBURSED" ? "bg-green-100 text-green-800" :
+                  a.status === "APPROVED" ? "bg-blue-100 text-blue-800" :
+                  a.status === "REJECTED" ? "bg-red-100 text-red-800" :
+                  "bg-amber-100 text-amber-800"
+                }`}>
+                  {a.status}
+                </span>
               </div>
-              <p className="text-sm text-gray-500 mt-1">
-                {a.scheme_name} · ₹{a.requested_amount?.toLocaleString("en-IN")}
-              </p>
+
               {a.required_documents?.length > 0 && (
                 <p className="text-xs text-gray-400 mt-2">Required: {a.required_documents.join(", ")}</p>
               )}
+
+              {/* Action buttons for loan officer lifecycle workflow */}
+              <div className="flex gap-2 mt-4 pt-3 border-t border-gray-100">
+                {a.status !== "APPROVED" && a.status !== "DISBURSED" && a.status !== "REJECTED" && (
+                  <>
+                    <button
+                      onClick={() => handleAction(a.application_id, "approve")}
+                      disabled={actionLoading === a.application_id}
+                      className="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition-all disabled:opacity-50"
+                    >
+                      {actionLoading === a.application_id ? "Processing..." : "Approve Application"}
+                    </button>
+                    <button
+                      onClick={() => handleAction(a.application_id, "reject")}
+                      disabled={actionLoading === a.application_id}
+                      className="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition-all disabled:opacity-50"
+                    >
+                      Reject
+                    </button>
+                  </>
+                )}
+
+                {a.status === "APPROVED" && (
+                  <button
+                    onClick={() => handleAction(a.application_id, "disburse")}
+                    disabled={actionLoading === a.application_id}
+                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition-all disabled:opacity-50"
+                  >
+                    {actionLoading === a.application_id ? "Disbursing..." : "Disburse Funds"}
+                  </button>
+                )}
+
+                {(a.status === "DISBURSED" || a.status === "REJECTED") && (
+                  <span className="text-xs text-gray-400 italic">Workflow completed ({a.status.toLowerCase()})</span>
+                )}
+              </div>
             </div>
           ))}
         </div>

@@ -1,96 +1,108 @@
 """
-Partner routing intelligence — deliberately NOT "nearest partner wins."
-Two-stage: hard filter (authorization/scheme/operational eligibility),
-then weighted scoring on the survivors. Weights are configurable constants
-below, not scattered magic numbers, per project principle "make weights
-configurable."
+Partner routing intelligence — explicitly balances spatial proximity with institutional risk.
+Enforces fund utilization quotas and non-performing asset (NPA) risk thresholds to ensure
+beneficiary loan applications are never routed to distressed or overdue channel partners.
 """
 import math
 from sqlalchemy.orm import Session
-
 from app.models import Partner, PartnerOperationalMetrics
 
-# Spec's example weighting (project doc, "Partner Intelligence" section)
 WEIGHTS = {
-    "scheme_fit": 0.30,
-    "capacity": 0.20,
-    "operational_status": 0.20,
-    "distance": 0.15,
+    "scheme_fit": 0.25,
+    "distance": 0.25,
+    "capacity": 0.15,
+    "npa_health": 0.15,
+    "fund_availability": 0.10,
     "processing_performance": 0.10,
-    "reliability": 0.05,
 }
 
-MAX_REASONABLE_DISTANCE_KM = 100  # beyond this, distance score floors to 0
+MAX_REASONABLE_DISTANCE_KM = 100
+MAX_PERMISSIBLE_NPA_RATE = 0.10          # 10% ceiling
+MAX_FUND_UTILIZATION_PCT = 95.0          # Quota exhaustion threshold
 
 
-def haversine_km(lat1, lng1, lat2, lng2) -> float:
+def haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     R = 6371.0
     p1, p2 = math.radians(lat1), math.radians(lat2)
     dphi = math.radians(lat2 - lat1)
     dlambda = math.radians(lng2 - lng1)
     a = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlambda / 2) ** 2
-    return 2 * R * math.asin(math.sqrt(a))
+    return round(2 * R * math.asin(math.sqrt(a)), 2)
 
 
-def _hard_filter(partner: Partner, scheme_id: str) -> tuple[bool, str]:
+def _check_fund_and_risk_eligibility(partner: Partner, metrics: PartnerOperationalMetrics, scheme_id: str) -> tuple[bool, str]:
     if not partner.is_operationally_active:
-        return False, "Partner is not currently operationally active"
+        return False, "Partner branch is temporarily operationally inactive"
     if scheme_id not in (partner.authorized_schemes or []):
-        return False, f"Partner is not authorized for scheme '{scheme_id}'"
+        return False, f"Not authorized for scheme '{scheme_id}'"
+    if metrics.has_overdues:
+        return False, "Disqualified: Branch has active institutional overdues with state corporation"
+    if (metrics.npa_rate or 0.0) > MAX_PERMISSIBLE_NPA_RATE:
+        return False, f"Disqualified: High NPA ratio ({((metrics.npa_rate or 0.0) * 100):.1f}%) exceeds scheme safety limit (10%)"
+    if (metrics.fund_utilization_pct or 0.0) >= MAX_FUND_UTILIZATION_PCT:
+        return False, f"Disqualified: Allocated scheme fund quota is fully exhausted ({metrics.fund_utilization_pct}%)"
     return True, ""
 
 
-def _score_partner(partner: Partner, metrics: PartnerOperationalMetrics, user_lat, user_lng, scheme_id) -> dict:
+def _score_partner(partner: Partner, metrics: PartnerOperationalMetrics, user_lat: float, user_lng: float, scheme_id: str) -> dict:
+    is_eligible, disqualification_reason = _check_fund_and_risk_eligibility(partner, metrics, scheme_id)
     reasons = []
 
-    scheme_fit = 1.0  # already hard-filtered on authorization; full credit if it passed
-    reasons.append(f"Authorized for scheme '{scheme_id}'")
-
-    capacity = (metrics.capacity_pct or 0) / 100
-    if capacity > 0.5:
-        reasons.append("Good remaining capacity")
-
-    operational_status = 1.0 if partner.is_operationally_active else 0.0
-    if operational_status:
-        reasons.append("Operationally active")
-
     distance_km = None
-    distance_score = 0.5  # neutral default if no user location provided
+    distance_score = 0.5
     if user_lat is not None and user_lng is not None:
         distance_km = haversine_km(user_lat, user_lng, partner.lat, partner.lng)
-        distance_score = max(0, 1 - (distance_km / MAX_REASONABLE_DISTANCE_KM))
+        distance_score = max(0.0, 1.0 - (distance_km / MAX_REASONABLE_DISTANCE_KM))
         if distance_km < 15:
-            reasons.append(f"Close to applicant ({distance_km:.1f} km)")
+            reasons.append(f"Near applicant ({distance_km} km)")
 
-    # lower avg_processing_days is better; normalize against a 0-20 day band
-    processing_score = max(0, min(1, 1 - (metrics.avg_processing_days or 10) / 20))
-    if metrics.avg_processing_days and metrics.avg_processing_days < 7:
-        reasons.append("Faster than average processing time")
+    if is_eligible:
+        scheme_fit = 1.0
+        capacity = (metrics.capacity_pct or 0.0) / 100.0
+        if capacity > 0.5:
+            reasons.append("Available application bandwidth")
 
-    # lower doc_rejection_rate is better (reliability proxy)
-    reliability_score = max(0, 1 - (metrics.doc_rejection_rate or 0))
-    if metrics.doc_rejection_rate is not None and metrics.doc_rejection_rate < 0.1:
-        reasons.append("Low document rejection rate")
+        npa = metrics.npa_rate if metrics.npa_rate is not None else 0.05
+        npa_score = max(0.0, 1.0 - (npa / MAX_PERMISSIBLE_NPA_RATE))
+        if npa <= 0.05:
+            reasons.append(f"Healthy credit portfolio ({round(npa * 100, 1)}% NPA)")
 
-    score = (
-        scheme_fit * WEIGHTS["scheme_fit"]
-        + capacity * WEIGHTS["capacity"]
-        + operational_status * WEIGHTS["operational_status"]
-        + distance_score * WEIGHTS["distance"]
-        + processing_score * WEIGHTS["processing_performance"]
-        + reliability_score * WEIGHTS["reliability"]
-    ) * 100
+        utilization = metrics.fund_utilization_pct if metrics.fund_utilization_pct is not None else 65.0
+        fund_score = max(0.0, 1.0 - (utilization / 100.0))
+        if utilization < 85:
+            reasons.append(f"Active scheme subsidy quota available ({round(100 - utilization, 1)}% remaining)")
+
+        processing_score = max(0.0, min(1.0, 1.0 - (metrics.avg_processing_days or 10.0) / 20.0))
+        if metrics.avg_processing_days and metrics.avg_processing_days < 8:
+            reasons.append("Fast document processing track")
+
+        score = (
+            scheme_fit * WEIGHTS["scheme_fit"]
+            + distance_score * WEIGHTS["distance"]
+            + capacity * WEIGHTS["capacity"]
+            + npa_score * WEIGHTS["npa_health"]
+            + fund_score * WEIGHTS["fund_availability"]
+            + processing_score * WEIGHTS["processing_performance"]
+        ) * 100
+    else:
+        score = 0.0
+        reasons.append(disqualification_reason)
 
     return {
         "partner_id": partner.partner_id,
         "partner_name": partner.name,
         "partner_type": partner.partner_type,
         "score": round(score, 1),
-        "distance_km": round(distance_km, 1) if distance_km is not None else None,
+        "distance_km": distance_km,
         "lat": partner.lat,
         "lng": partner.lng,
         "reasons": reasons,
         "is_simulated_data": partner.is_simulated_data or metrics.is_simulated_data,
+        "npa_rate": metrics.npa_rate,
+        "fund_utilization_pct": metrics.fund_utilization_pct,
+        "has_overdues": metrics.has_overdues,
+        "is_eligible": is_eligible,
+        "disqualification_reason": disqualification_reason if not is_eligible else None,
     }
 
 
@@ -100,19 +112,10 @@ def route_partners(
     user_lat: float = None,
     user_lng: float = None,
 ) -> dict:
-    """
-    Returns {"recommended_partner": {...}, "alternatives": [...]}.
-    Raises ValueError if no partner survives the hard filter (caller should
-    surface this as a real "no delivery route available" state, not hide it
-    — this maps directly to the spec's "Credit Access Gap" metric).
-    """
     partners = db.query(Partner).all()
-    scored = []
+    all_evaluated = []
 
     for partner in partners:
-        ok, _reason = _hard_filter(partner, scheme_id)
-        if not ok:
-            continue
         metrics = (
             db.query(PartnerOperationalMetrics)
             .filter(PartnerOperationalMetrics.partner_id == partner.partner_id)
@@ -120,17 +123,29 @@ def route_partners(
         )
         if not metrics:
             continue
-        scored.append(_score_partner(partner, metrics, user_lat, user_lng, scheme_id))
+        all_evaluated.append(_score_partner(partner, metrics, user_lat, user_lng, scheme_id))
 
-    scored.sort(key=lambda p: -p["score"])
-
-    if not scored:
+    eligible = [p for p in all_evaluated if p["is_eligible"]]
+    if not eligible:
         raise ValueError(
-            f"No eligible, authorized, operationally active partner found for scheme '{scheme_id}'. "
-            "This applicant has a credit-access gap for this scheme."
+            f"No eligible partner with available fund quota and acceptable NPA found for '{scheme_id}'. "
+            "Applicant has an active credit-access gap."
         )
 
+    # Best algorithmic recommendation (highest composite score)
+    eligible.sort(key=lambda p: -p["score"])
+    recommended_partner = eligible[0]
+
+    # Strictly closest partner by physical distance
+    with_distance = [p for p in all_evaluated if p["distance_km"] is not None]
+    with_distance.sort(key=lambda p: p["distance_km"])
+    closest_partner = with_distance[0] if with_distance else recommended_partner
+
+    # Alternatives include all other evaluated branches in the district
+    alternatives = [p for p in all_evaluated if p["partner_id"] != recommended_partner["partner_id"]]
+
     return {
-        "recommended_partner": scored[0],
-        "alternatives": scored[1:4],  # cap alternatives shown
+        "recommended_partner": recommended_partner,
+        "closest_partner": closest_partner,
+        "alternatives": alternatives,
     }

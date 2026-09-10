@@ -1,13 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
+from typing import Optional
 
 from app.db.session import get_db
-from app.models import Partner
+from app.models import Partner, Application
 from app.schemas.application import PartnerRouteRequest, PartnerRouteResponse
 from app.services.routing_engine import route_partners
 from app.services.application_service import attach_partner_routing
 
 router = APIRouter(prefix="/api/partners", tags=["partners"])
+
+
+class PartnerActionRequest(BaseModel):
+    application_id: str
+    partner_id: str
+    rejection_reason: Optional[str] = None
 
 
 @router.get("")
@@ -69,3 +77,36 @@ def route(payload: PartnerRouteRequest, db: Session = Depends(get_db)):
         )
 
     return result
+
+
+@router.post("/approve")
+def approve_application(payload: PartnerActionRequest, db: Session = Depends(get_db)):
+    app = db.query(Application).filter(Application.application_id == payload.application_id).first()
+    if not app:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    app.status = "APPROVED"
+    db.commit()
+    return {"status": "APPROVED", "message": "Application approved successfully."}
+
+
+@router.post("/reject")
+def reject_application(payload: PartnerActionRequest, db: Session = Depends(get_db)):
+    app = db.query(Application).filter(Application.application_id == payload.application_id).first()
+    if not app:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    app.status = "REJECTED"
+    db.commit()
+    return {"status": "REJECTED", "reason": payload.rejection_reason}
+
+
+@router.post("/disburse")
+def disburse_loan(payload: PartnerActionRequest, db: Session = Depends(get_db)):
+    app = db.query(Application).filter(Application.application_id == payload.application_id).first()
+    if not app:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    app.status = "DISBURSED"
+    db.commit()
+    return {"status": "DISBURSED", "message": "Funds disbursed successfully."}

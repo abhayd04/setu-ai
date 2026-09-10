@@ -57,6 +57,8 @@ def recommend_schemes(profile: dict, db: Session) -> list[dict]:
             "moratorium_months": scheme.moratorium_months,
             "project_cost_coverage_pct": scheme.project_cost_coverage_pct,
             "match_score": _match_score(profile, scheme) if eligibility["eligible"] else 0,
+            "description": scheme.description,
+            "url": scheme.url,
         }
         results.append(entry)
 

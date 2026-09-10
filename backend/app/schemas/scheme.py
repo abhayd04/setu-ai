@@ -21,6 +21,8 @@ class SchemeOut(BaseModel):
     required_documents: List[str]
     policy_version: str
     active: bool
+    description: Optional[str] = None
+    url: Optional[str] = None
 
     class Config:
         from_attributes = True

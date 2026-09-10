@@ -30,3 +30,5 @@ class Scheme(Base):
     effective_to = Column(Date, nullable=True)
     active = Column(Boolean, default=True)
     source_note = Column(String, nullable=True)              # citation / where the figures came from
+    description = Column(String, nullable=True)              # Detailed scheme overview for users
+    url = Column(String, nullable=True)                      # Direct external link to official scheme details/portal

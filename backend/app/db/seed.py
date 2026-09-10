@@ -1,10 +1,11 @@
 """
 Run once after migrations: `python -m app.db.seed`
-Loads data/schemes.json and data/partners.json into Postgres.
-Idempotent-ish: uses merge() so re-running updates existing rows instead of duplicating.
+Loads data/schemes.json and data/partners.json into Postgres/SQLite.
+Idempotent: uses merge() to update existing rows instead of duplicating.
 """
 import json
 import os
+from sqlalchemy import text
 
 from app.db.session import SessionLocal, Base, engine
 from app.models import Scheme, Partner, PartnerOperationalMetrics
@@ -22,12 +23,28 @@ def seed_schemes(db):
 
 
 def seed_partners(db):
+    # Safely inject our new NPA and Quota columns if they don't exist yet
+    with engine.connect() as conn:
+        try:
+            conn.execute(text("ALTER TABLE partner_operational_metrics ADD COLUMN npa_rate FLOAT DEFAULT 0.05"))
+            conn.execute(text("ALTER TABLE partner_operational_metrics ADD COLUMN fund_utilization_pct FLOAT DEFAULT 65.0"))
+            conn.execute(text("ALTER TABLE partner_operational_metrics ADD COLUMN has_overdues BOOLEAN DEFAULT FALSE"))
+            conn.commit()
+        except Exception:
+            pass # Columns already exist or unsupported by dialect, safe to continue
+
     with open(os.path.join(DATA_DIR, "partners.json")) as f:
         partners = json.load(f)
+        
     for p in partners:
-        metrics = p.pop("metrics")
-        db.merge(Partner(**p))
+        p_copy = dict(p)
+        metrics = p_copy.pop("metrics")
+        
+        # Merge the main partner data (updates coordinates/names)
+        db.merge(Partner(**p_copy))
         db.commit()
+        
+        # Merge the operational metrics
         existing = (
             db.query(PartnerOperationalMetrics)
             .filter_by(partner_id=p["partner_id"])
@@ -39,11 +56,12 @@ def seed_partners(db):
         else:
             db.add(PartnerOperationalMetrics(partner_id=p["partner_id"], **metrics))
         db.commit()
-    print(f"Seeded {len(partners)} partners + metrics.")
+        
+    print(f"Seeded {len(partners)} partners + metrics with updated coordinates.")
 
 
 if __name__ == "__main__":
-    Base.metadata.create_all(bind=engine)  # safety net if alembic hasn't run yet
+    Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
         seed_schemes(db)

@@ -41,3 +41,5 @@ class SchemeRecommendation(BaseModel):
     moratorium_months: int
     project_cost_coverage_pct: float
     match_score: float
+    description: Optional[str] = None
+    url: Optional[str] = None

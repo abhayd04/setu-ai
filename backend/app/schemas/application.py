@@ -43,8 +43,14 @@ class PartnerRouteResult(BaseModel):
     lng: float
     reasons: List[str]
     is_simulated_data: bool
+    npa_rate: Optional[float] = None
+    fund_utilization_pct: Optional[float] = None
+    has_overdues: Optional[bool] = False
+    is_eligible: Optional[bool] = True
+    disqualification_reason: Optional[str] = None
 
 
 class PartnerRouteResponse(BaseModel):
     recommended_partner: PartnerRouteResult
+    closest_partner: Optional[PartnerRouteResult] = None
     alternatives: List[PartnerRouteResult]

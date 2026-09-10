@@ -36,3 +36,47 @@ def get_application(application_id: str, db: Session = Depends(get_db)):
         "status": app_row.status.value,
         "timeline": timeline,
     }
+from app.models import Scheme, Document, Application
+from app.services.document_service import get_required_documents
+
+@router.post("/{application_id}/submit")
+def submit_application(application_id: str, db: Session = Depends(get_db)):
+    app_row = db.query(Application).filter(Application.application_id == application_id).first()
+    if not app_row:
+        raise HTTPException(status_code=404, detail="Application not found")
+        
+    if not app_row.scheme_id:
+        raise HTTPException(status_code=400, detail="Cannot submit without a selected scheme.")
+
+    # 1. Fetch scheme requirements and uploaded documents
+    scheme = db.query(Scheme).filter(Scheme.scheme_id == app_row.scheme_id).first()
+    uploaded_docs = db.query(Document).filter(Document.application_id == application_id).all()
+
+    # 2. Block submission if any uploaded document is invalid
+    for doc in uploaded_docs:
+        if doc.validation_status == "invalid":
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Document '{doc.doc_type}' is invalid. Please replace it before submitting."
+            )
+
+    # 3. Check if all required documents are actually present
+    valid_types = [d.doc_type for d in uploaded_docs if d.validation_status in ["valid", "needs_review"]]
+    doc_check = get_required_documents(scheme.required_documents or [], valid_types)
+
+    if not doc_check["all_present"]:
+        missing = ", ".join(doc_check["missing_documents"])
+        raise HTTPException(status_code=400, detail=f"Missing required documents: {missing}")
+
+    # 4. Mutate State and Route to Partner
+    # Since the UI already attached the partner in the PARTNER_RECOMMENDED stage,
+    # we just need to finalize the status so it appears on the Partner Dashboard.
+    app_row.status = "SUBMITTED"  # Ensure this matches your Enum definition (e.g., ApplicationStatus.SUBMITTED if using Enums)
+    db.commit()
+
+    return {
+        "message": "Application submitted successfully",
+        "application_id": app_row.application_id,
+        "status": app_row.status.value if hasattr(app_row.status, 'value') else app_row.status,
+        "partner_id": app_row.partner_id
+    }

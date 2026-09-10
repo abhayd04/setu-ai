@@ -19,17 +19,20 @@ class Partner(Base):
 
 class PartnerOperationalMetrics(Base):
     """
-    Simulated/demo operational data — MUST stay flagged is_simulated_data=True
-    unless a real government feed is ever wired in. Never presented as live data.
+    Operational data including NPA rates, fund utilization, and overdue status
+    governing institutional partner eligibility.
     """
     __tablename__ = "partner_operational_metrics"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     partner_id = Column(String, ForeignKey("partners.partner_id"), nullable=False)
-    capacity_pct = Column(Float, default=50.0)          # 0-100, remaining capacity
+    capacity_pct = Column(Float, default=50.0)             # 0-100, remaining capacity
     current_workload = Column(Integer, default=0)
     avg_processing_days = Column(Float, default=7.0)
-    doc_rejection_rate = Column(Float, default=0.1)      # 0-1
+    doc_rejection_rate = Column(Float, default=0.1)         # 0-1
+    npa_rate = Column(Float, default=0.05)                 # 0-1, Non-Performing Asset ratio
+    fund_utilization_pct = Column(Float, default=65.0)     # 0-100, scheme quota utilization
+    has_overdues = Column(Boolean, default=False)          # High overdue lockout flag
     is_simulated_data = Column(Boolean, default=True)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
