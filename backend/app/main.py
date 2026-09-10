@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.api import schemes, profile, intent, eligibility, calculator, partners, applications, documents, assistant, dashboard
-from app.db.session import SessionLocal
+from app.db.session import SessionLocal, engine, Base
 from app.db.seed import seed_schemes, seed_partners
 
 app = FastAPI(
@@ -23,6 +23,10 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup_event():
+    # 1. Create tables first
+    Base.metadata.create_all(bind=engine)
+    
+    # 2. Seed data
     db = SessionLocal()
     try:
         seed_schemes(db)
