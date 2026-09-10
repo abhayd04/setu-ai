@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api import schemes, profile, intent, eligibility, calculator, partners, applications, documents, assistant, dashboard
 from app.db.session import SessionLocal
-from app.db.seed import seed_database
+from app.db.seed import seed_schemes, seed_partners
 
 app = FastAPI(
     title="SETU-AI",
@@ -25,7 +25,8 @@ app.add_middleware(
 def startup_event():
     db = SessionLocal()
     try:
-        seed_database(db)
+        seed_schemes(db)
+        seed_partners(db)
     except Exception as e:
         print(f"Seeding note or already seeded: {e}")
     finally:
