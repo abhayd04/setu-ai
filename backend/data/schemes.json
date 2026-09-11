@@ -19,7 +19,7 @@
     "active": true,
     "source_note": "Tier 1 Micro Business",
     "description": "The Micro Finance Scheme managed by NSFDC is specifically tailored for grassroots entrepreneurs, petty vendors, and traditional artisans belonging to targeted communities. It delivers collateral-free micro-credit assistance up to ₹1,25,000 channeled securely through State Channelizing Agencies (SCAs) and Channel Partner networks. The primary objective is to facilitate immediate liquidity for purchasing raw materials, small equipment, or inventory without falling into debt traps. It features a highly concessional interest rate of 6.5% per annum, covers up to 90% of the aggregate project cost, and provides a comfortable 3-month initial moratorium window to stabilize operations before regular monthly repayments begin over a 36-month tenure.",
-    "url": "https://www.google.com/search?q=NSFDC+Micro+Finance+Scheme"
+    "url": "https://nsfdc.nic.in/en/micro-credit-finance"
   },
   {
     "scheme_id": "aajeevika_micro_finance",
@@ -41,7 +41,7 @@
     "active": true,
     "source_note": "Tier 1 MFI Route",
     "description": "Aajeevika Micro-Finance Yojana leverages community-centric financial infrastructure, routing credit up to ₹1,25,000 directly through specialized Non-Banking Financial Company Micro Finance Institutions (NBFC-MFIs). Designed to foster peer-backed accountability and self-help group participation, this scheme fast-tracks micro-loans for income-generating domestic and trade activities. It provides up to 90% project cost backing across a 3-year repayment structure, enabling vulnerable households to rapidly scale up micro-enterprises and achieve financial inclusion.",
-    "url": "https://www.google.com/search?q=Aajeevika+Micro+Finance+Yojana"
+    "url": "https://aajeevika.gov.in/"
   },
   {
     "scheme_id": "udyam_nidhi_yojana",
@@ -63,7 +63,7 @@
     "active": true,
     "source_note": "Tier 2 Small Business",
     "description": "Udyam Nidhi Yojana bridges the gap between micro-ventures and medium enterprises by offering structured term loans up to ₹4.5 Lakhs. Facilitated through cooperative banking networks and regional small finance banks, this program targets small-scale manufacturing units, service shops, and commercial trading ventures requiring intermediate capital. The scheme covers up to 85% of total project outlays, offering a 5-year repayment schedule backed by a 6-month moratorium to support businesses during their initial setup and customer acquisition phases.",
-    "url": "https://www.google.com/search?q=Udyam+Nidhi+Yojana"
+    "url": "https://nsfdc.nic.in/en/udyam-nidhi-yojana"
   },
   {
     "scheme_id": "term_loan_nsfdc",
@@ -85,7 +85,7 @@
     "active": true,
     "source_note": "Tier 3 Medium Business",
     "description": "The NSFDC Term Loan provides robust financial backing up to ₹45 Lakhs for establishing substantial medium-scale commercial, agricultural, and industrial enterprises. Aimed at ambitious entrepreneurs looking to scale operations, it features a highly favorable 8% interest rate, up to 90% project cost coverage, an extended 7-year tenure, and a substantial 12-month moratorium period. This allows enterprises adequate runway for heavy machinery procurement, infrastructure development, and market penetration before amortization begins.",
-    "url": "https://www.google.com/search?q=NSFDC+Term+Loan+Scheme"
+    "url": "https://nsfdc.nic.in/en/term-loan"
   },
   {
     "scheme_id": "stand_up_india",
@@ -151,7 +151,7 @@
     "active": true,
     "source_note": "Tier 5 Guarantee Scheme",
     "description": "The Credit Enhancement Guarantee Scheme removes the primary barrier to commercial bank financing by providing sovereign guarantee cover up to ₹1 Crore for individuals and up to ₹5 Crores for corporate borrowers. By guaranteeing commercial banks against loan defaults, this scheme incentivizes financial institutions to sanction large-scale commercial and industrial loans to young SC entrepreneurs without demanding excessive tangible collateral.",
-    "url": "https://www.google.com/search?q=Credit+Enhancement+Guarantee+Scheme+for+Scheduled+Castes"
+    "url": "https://www.ifciltd.com/"
   },
   {
     "scheme_id": "pre_matric_scholarship",
@@ -217,7 +217,7 @@
     "active": true,
     "source_note": "Category B Professional Courses",
     "description": "The NSFDC Educational Loan Scheme provides comprehensive financial backing up to ₹40 Lakhs for students pursuing professional, technical, medical, engineering, or management courses in India and abroad. Offering a concessional 6.5% interest rate, 95% expense coverage (tuition, hostel, equipment), and an extended 5-year moratorium period covering the full duration of studies plus placement search time, it ensures students can focus entirely on academic success without immediate financial anxiety.",
-    "url": "https://www.google.com/search?q=NSFDC+Educational+Loan+Scheme"
+    "url": "https://nsfdc.nic.in/en/education-loan"
   },
   {
     "scheme_id": "top_class_education",
@@ -305,7 +305,7 @@
     "active": true,
     "source_note": "Study Abroad Grant",
     "description": "The National Overseas Scholarship facilitates financial grants for selected students pursuing Master's degrees and Ph.D. programs in top-ranked international universities abroad. The grant covers 100% of tuition fees, maintenance allowances in foreign currency, airfare, visa fees, and incidental travel expenses, ensuring talented scholars gain world-class global education and research exposure.",
-    "url": "https://nosmsje.gov.in/"
+    "url": "https://socialjustice.gov.in/schemes/28"
   },
   {
     "scheme_id": "free_coaching_scheme",
@@ -349,7 +349,7 @@
     "active": true,
     "source_note": "Community Group Financing",
     "description": "Collaborative group credit channelized through Self Help Groups (SHGs) providing up to ₹1.25 Lakhs per beneficiary member to foster collective savings, mutual financial trust, and joint enterprise ventures. It features a favorable 7% interest rate, 90% project cost financing, a 3-month moratorium, and peer-backed accountability that strengthens community enterprise growth.",
-    "url": "https://www.google.com/search?q=NBCFDC+SHG+Group+Loan"
+    "url": "https://nbcfdc.gov.in/en/micro-finance-scheme"
   },
   {
     "scheme_id": "mahila_samriddhi",
@@ -371,7 +371,7 @@
     "active": true,
     "source_note": "Women Micro-Finance",
     "description": "Mahila Samriddhi Yojana is an exclusive women-centric empowerment program offering concessional micro-credit up to ₹1 Lakh to female entrepreneurs. It enables women to independently launch and operate home-based businesses, textile units, boutique shops, and food processing micro-enterprises. It offers a low 5% interest rate, 95% project cost coverage, and a flexible 4-year repayment framework with a 6-month moratorium.",
-    "url": "https://www.google.com/search?q=Mahila+Samriddhi+Yojana"
+    "url": "https://nsfdc.nic.in/en/mahila-samriddhi-yojana"
   },
   {
     "scheme_id": "new_swarnima",
@@ -393,7 +393,7 @@
     "active": true,
     "source_note": "Women Term Loan",
     "description": "The New Swarnima Scheme provides term loan assistance up to ₹10 Lakhs at an ultra-concessional 6% annual interest rate exclusively for women entrepreneurs. Designed to promote commercial independence, it covers up to 85% of project expenses across retail, service, and manufacturing ventures, backed by a 5-year repayment schedule and a 6-month initial moratorium period.",
-    "url": "https://www.google.com/search?q=New+Swarnima+Scheme"
+    "url": "https://nbcfdc.gov.in/en/new-swarnima"
   },
   {
     "scheme_id": "dr_ambedkar_scheme_hospitality",
@@ -415,7 +415,7 @@
     "active": true,
     "source_note": "Hospitality Skill Training",
     "description": "A specialized skill development initiative focused on culinary arts, hotel management, hospitality operations, and tourism services. It provides 100% free professional training, uniform and kit grants, monthly living stipends, and direct industry placement tie-ups with leading hotel chains and hospitality enterprises.",
-    "url": "https://www.google.com/search?q=Dr+Ambedkar+Scheme+for+Hospitality"
+    "url": "https://socialjustice.gov.in/"
   },
   {
     "scheme_id": "national_safai_karamcharis_finance",
@@ -437,6 +437,6 @@
     "active": true,
     "source_note": "Safai Karamcharis Support",
     "description": "The NSKFDC Rehabilitation Scheme provides concessional financial assistance, capital subsidies, and skill training for sanitation workers and their dependents to successfully transition into safe, dignified alternative livelihood ventures. It features a minimal 4% annual interest rate, 95% project cost coverage, and a 12-month moratorium to ensure sustainable income generation.",
-    "url": "https://www.google.com/search?q=NSFDC+Rehabilitation+Scheme"
+    "url": "https://nskfdc.nic.in/"
   }
 ]

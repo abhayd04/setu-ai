@@ -5,7 +5,7 @@ import { api } from "@/lib/api";
 import { useVoiceInput } from "@/lib/useVoiceInput";
 
 const PartnerMap = dynamic(() => import("@/components/PartnerMap").then((m) => m.PartnerMap), {
-  ssr: false, // Leaflet needs `window` — must not render on the server
+  ssr: false,
 });
 
 type Profile = {
@@ -40,7 +40,7 @@ type Recommendation = {
 const FIELD_LABELS: Record<string, { en: string; hi: string }> = {
   income: { en: "Annual family income", hi: "वार्षिक पारिवारिक आय" },
   category: { en: "Category (e.g. SC)", hi: "श्रेणी (जैसे SC)" },
-  purpose: { en: "Purpose (business/education/health/skill_development)", hi: "उद्देश्य (व्यवसाय/शिक्षा/स्वास्थ्य/कौशल विकास)" },
+  purpose: { en: "Purpose", hi: "उद्देश्य" },
   business_type: { en: "Business type", hi: "व्यवसाय का प्रकार" },
   project_cost: { en: "Estimated project cost", hi: "अनुमानित परियोजना लागत" },
   requested_amount: { en: "Loan amount needed", hi: "आवश्यक ऋण राशि" },
@@ -80,6 +80,7 @@ export default function CitizenIntake() {
       setProfile(res.data.profile);
       setMissingFields(res.data.missing_fields);
       setRecommendations(null);
+      setManualValues({});
     } catch (e: any) {
       setErrorMsg(e?.response?.data?.detail || "Extraction failed. Check backend is running and GEMINI_API_KEY is set.");
     } finally {
@@ -116,7 +117,7 @@ export default function CitizenIntake() {
     setErrorMsg(null);
     try {
       const p = mergedProfile();
-      const res = await api.post("/api/schemes/recommend", {
+      const res = await await api.post("/api/schemes/recommend", {
         income: p.income,
         category: p.category,
         gender: p.gender,
@@ -335,9 +336,9 @@ export default function CitizenIntake() {
                 {Object.entries(profile)
                   .filter(([k, v]) => v && k !== "language" && k !== "raw_input_text")
                   .map(([k, v]) => (
-                    <li key={k} className="flex justify-between border-b border-slate-200/50 pb-1.5 last:border-none">
-                      <span className="text-slate-400 capitalize">{FIELD_LABELS[k]?.[language] || k}:</span> 
-                      <span className="font-semibold text-slate-800">{String(v)}</span>
+                    <li key={k} className="flex flex-col sm:flex-row sm:justify-between border-b border-slate-200/50 pb-1.5 last:border-none gap-1 sm:gap-4">
+                      <span className="text-slate-400 capitalize shrink-0">{FIELD_LABELS[k]?.[language] || k}:</span> 
+                      <span className="font-semibold text-slate-800 break-words text-left sm:text-right">{String(v)}</span>
                     </li>
                   ))}
               </ul>
@@ -420,12 +421,19 @@ export default function CitizenIntake() {
                   </ul>
 
                   <div className="flex flex-wrap items-center gap-3 pt-2">
-                    <button 
-                      className="text-xs font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-4" 
-                      onClick={() => handleShowEmi(rec)}
-                    >
-                      {emiFor?.scheme_id === rec.scheme_id ? t("Hide Breakdown", "विवरण छिपाएं") : t("Calculate EMI & Breakdown", "EMI और ऋण विवरण देखें")}
-                    </button>
+                    {/* Hides EMI for 100% grants and zero interest */}
+                    {rec.interest_rate === 0 ? (
+                      <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200/60">
+                        {t("100% Financial Grant (No Repayment)", "100% वित्तीय अनुदान (कोई पुनर्भुगतान नहीं)")}
+                      </span>
+                    ) : (
+                      <button 
+                        className="text-xs font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-4" 
+                        onClick={() => handleShowEmi(rec)}
+                      >
+                        {emiFor?.scheme_id === rec.scheme_id ? t("Hide Breakdown", "विवरण छिपाएं") : t("Calculate EMI & Breakdown", "EMI और ऋण विवरण देखें")}
+                      </button>
+                    )}
 
                     {rec.url && (
                       <a 
@@ -596,7 +604,6 @@ export default function CitizenIntake() {
                   </div>
               ))}
 
-              {/* Nearest Partner Comparison Notice if different */}
               {routing.closest_partner && routing.closest_partner.partner_id !== routing.recommended_partner.partner_id && (
                 <div className="mt-3 bg-amber-50/80 border border-amber-200 rounded-lg p-3 text-xs space-y-1">
                   <p className="font-bold text-amber-900 flex items-center gap-1">
@@ -613,9 +620,9 @@ export default function CitizenIntake() {
             </div>
 
             {applicationStatus && (
-              <div className="text-xs text-slate-500 font-medium bg-slate-100/80 px-3 py-2 rounded-lg flex justify-between items-center">
+              <div className="text-xs text-slate-500 font-medium bg-slate-100/80 px-3 py-3 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <span>{t("Application status", "आवेदन स्थिति")}: <strong className="text-slate-800">{applicationStatus}</strong></span>
-                <span className="font-mono text-slate-400 text-[10px]">ID: {applicationId}</span>
+                <span className="font-mono text-slate-400 text-[10px] break-all">ID: {applicationId}</span>
               </div>
             )}
           </div>
