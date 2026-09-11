@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  // Hardcoding this temporarily guarantees perfect routing for the pitch
+  // Pointing back to live Render backend for production / GitHub push
   baseURL: "https://setu-backend-hhsc.onrender.com/", 
 });
 

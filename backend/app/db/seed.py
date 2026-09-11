@@ -23,15 +23,21 @@ def seed_schemes(db):
 
 
 def seed_partners(db):
-    # Safely inject our new NPA and Quota columns if they don't exist yet
+    # Safely inject our new columns if they don't exist yet
     with engine.connect() as conn:
+        try:
+            conn.execute(text("ALTER TABLE partners ADD COLUMN email VARCHAR"))
+            conn.commit()
+        except Exception:
+            pass # Column already exists
+            
         try:
             conn.execute(text("ALTER TABLE partner_operational_metrics ADD COLUMN npa_rate FLOAT DEFAULT 0.05"))
             conn.execute(text("ALTER TABLE partner_operational_metrics ADD COLUMN fund_utilization_pct FLOAT DEFAULT 65.0"))
             conn.execute(text("ALTER TABLE partner_operational_metrics ADD COLUMN has_overdues BOOLEAN DEFAULT FALSE"))
             conn.commit()
         except Exception:
-            pass # Columns already exist or unsupported by dialect, safe to continue
+            pass 
 
     with open(os.path.join(DATA_DIR, "partners.json")) as f:
         partners = json.load(f)
@@ -40,7 +46,7 @@ def seed_partners(db):
         p_copy = dict(p)
         metrics = p_copy.pop("metrics")
         
-        # Merge the main partner data (updates coordinates/names)
+        # Merge the main partner data (updates coordinates/names/emails)
         db.merge(Partner(**p_copy))
         db.commit()
         
@@ -57,7 +63,7 @@ def seed_partners(db):
             db.add(PartnerOperationalMetrics(partner_id=p["partner_id"], **metrics))
         db.commit()
         
-    print(f"Seeded {len(partners)} partners + metrics with updated coordinates.")
+    print(f"Seeded {len(partners)} partners + metrics with updated coordinates and emails.")
 
 
 if __name__ == "__main__":

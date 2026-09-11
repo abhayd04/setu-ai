@@ -19,7 +19,7 @@
     "active": true,
     "source_note": "Tier 1 Micro Business",
     "description": "The Micro Finance Scheme managed by NSFDC is specifically tailored for grassroots entrepreneurs, petty vendors, and traditional artisans belonging to targeted communities. It delivers collateral-free micro-credit assistance up to ₹1,25,000 channeled securely through State Channelizing Agencies (SCAs) and Channel Partner networks. The primary objective is to facilitate immediate liquidity for purchasing raw materials, small equipment, or inventory without falling into debt traps. It features a highly concessional interest rate of 6.5% per annum, covers up to 90% of the aggregate project cost, and provides a comfortable 3-month initial moratorium window to stabilize operations before regular monthly repayments begin over a 36-month tenure.",
-    "url": "https://nsfdc.nic.in/en/micro-credit-finance"
+    "url": "https://www.myscheme.gov.in/schemes/mcfnsfdc"
   },
   {
     "scheme_id": "aajeevika_micro_finance",
@@ -63,7 +63,7 @@
     "active": true,
     "source_note": "Tier 2 Small Business",
     "description": "Udyam Nidhi Yojana bridges the gap between micro-ventures and medium enterprises by offering structured term loans up to ₹4.5 Lakhs. Facilitated through cooperative banking networks and regional small finance banks, this program targets small-scale manufacturing units, service shops, and commercial trading ventures requiring intermediate capital. The scheme covers up to 85% of total project outlays, offering a 5-year repayment schedule backed by a 6-month moratorium to support businesses during their initial setup and customer acquisition phases.",
-    "url": "https://nsfdc.nic.in/en/udyam-nidhi-yojana"
+    "url": "https://www.smfgindiacredit.com/mahila-udyam-nidhi-scheme.aspx"
   },
   {
     "scheme_id": "term_loan_nsfdc",
@@ -129,7 +129,7 @@
     "active": true,
     "source_note": "Tier 5 Very Large Wealthy Entrepreneurs",
     "description": "The Venture Capital Fund for Scheduled Castes (VCF-SC) is an elite, high-tier financial instrument providing equity and debt funding ranging from ₹10 Lakhs up to ₹15 Crores. Designed for corporate entities with at least 51% SC shareholding, it targets innovative startups, deep-tech firms, and large-scale manufacturing units. Offering concessional 4% interest rates, a 10-year repayment window, and up to a 24-month moratorium, it acts as a catalyst for creating wealth, corporate leadership, and large-scale employment.",
-    "url": "https://www.ifciltd.com/venute-capital-fund-for-scheduled-castes-vcf-sc"
+    "url": "https://www.vcfsc.in/default.html"
   },
   {
     "scheme_id": "credit_enhancement_guarantee",
@@ -151,7 +151,7 @@
     "active": true,
     "source_note": "Tier 5 Guarantee Scheme",
     "description": "The Credit Enhancement Guarantee Scheme removes the primary barrier to commercial bank financing by providing sovereign guarantee cover up to ₹1 Crore for individuals and up to ₹5 Crores for corporate borrowers. By guaranteeing commercial banks against loan defaults, this scheme incentivizes financial institutions to sanction large-scale commercial and industrial loans to young SC entrepreneurs without demanding excessive tangible collateral.",
-    "url": "https://www.ifciltd.com/"
+    "url": "https://www.ifcicegssc.in/#No-back"
   },
   {
     "scheme_id": "pre_matric_scholarship",
@@ -173,7 +173,7 @@
     "active": true,
     "source_note": "Category B Education",
     "description": "The Pre-Matric Scholarship is a foundational educational welfare grant designed to eliminate early-stage school dropouts among students enrolled in Classes 9 and 10. The scheme provides guaranteed financial support covering monthly maintenance allowances, textbook grants, and mandatory school levies. By alleviating the economic burden on low-income households, it ensures uninterrupted secondary education and builds a strong platform for higher academic pursuits.",
-    "url": "https://scholarships.gov.in/"
+    "url": "https://socialjustice.gov.in/schemes/23"
   },
   {
     "scheme_id": "post_matric_scholarship",
@@ -195,7 +195,7 @@
     "active": true,
     "source_note": "Category B Higher Education",
     "description": "The Post-Matric Scholarship (PMS-SC) is a flagship educational support mechanism covering 100% of compulsory non-refundable tuition fees alongside a regular monthly maintenance stipend (~₹750 to ₹1,200/month based on course tier). It supports students pursuing higher secondary, undergraduate, postgraduate, and professional degree programs across recognized institutions, ensuring that financial constraints never impede higher academic excellence.",
-    "url": "https://scholarships.gov.in/"
+    "url": "https://socialjustice.gov.in/schemes/25"
   },
   {
     "scheme_id": "educational_loan_nsfdc",
@@ -217,7 +217,7 @@
     "active": true,
     "source_note": "Category B Professional Courses",
     "description": "The NSFDC Educational Loan Scheme provides comprehensive financial backing up to ₹40 Lakhs for students pursuing professional, technical, medical, engineering, or management courses in India and abroad. Offering a concessional 6.5% interest rate, 95% expense coverage (tuition, hostel, equipment), and an extended 5-year moratorium period covering the full duration of studies plus placement search time, it ensures students can focus entirely on academic success without immediate financial anxiety.",
-    "url": "https://nsfdc.nic.in/en/education-loan"
+    "url": "https://www.myscheme.gov.in/schemes/els-nsfdc"
   },
   {
     "scheme_id": "top_class_education",
@@ -327,7 +327,7 @@
     "active": true,
     "source_note": "Competitive Exam Coaching",
     "description": "This scheme provides quality free coaching through empanelled premier coaching institutes for students preparing for prestigious competitive examinations, including UPSC civil services, state PSCs, banking exams, IIT-JEE, NEET, and professional entrance tests. Along with 100% fee coverage, students receive a monthly subsistence stipend to support living costs during their preparation period.",
-    "url": "https://socialjustice.gov.in/"
+    "url": "https://socialjustice.gov.in/schemes/30"
   },
   {
     "scheme_id": "shg_group_loan",
@@ -349,7 +349,7 @@
     "active": true,
     "source_note": "Community Group Financing",
     "description": "Collaborative group credit channelized through Self Help Groups (SHGs) providing up to ₹1.25 Lakhs per beneficiary member to foster collective savings, mutual financial trust, and joint enterprise ventures. It features a favorable 7% interest rate, 90% project cost financing, a 3-month moratorium, and peer-backed accountability that strengthens community enterprise growth.",
-    "url": "https://nbcfdc.gov.in/en/micro-finance-scheme"
+    "url": "https://nbcfdc.gov.in/nbcfdc/web/en/group-loan-scheme"
   },
   {
     "scheme_id": "mahila_samriddhi",
@@ -371,7 +371,7 @@
     "active": true,
     "source_note": "Women Micro-Finance",
     "description": "Mahila Samriddhi Yojana is an exclusive women-centric empowerment program offering concessional micro-credit up to ₹1 Lakh to female entrepreneurs. It enables women to independently launch and operate home-based businesses, textile units, boutique shops, and food processing micro-enterprises. It offers a low 5% interest rate, 95% project cost coverage, and a flexible 4-year repayment framework with a 6-month moratorium.",
-    "url": "https://nsfdc.nic.in/en/mahila-samriddhi-yojana"
+    "url": "https://www.myscheme.gov.in/schemes/cbssc-msy"
   },
   {
     "scheme_id": "new_swarnima",
@@ -393,7 +393,7 @@
     "active": true,
     "source_note": "Women Term Loan",
     "description": "The New Swarnima Scheme provides term loan assistance up to ₹10 Lakhs at an ultra-concessional 6% annual interest rate exclusively for women entrepreneurs. Designed to promote commercial independence, it covers up to 85% of project expenses across retail, service, and manufacturing ventures, backed by a 5-year repayment schedule and a 6-month initial moratorium period.",
-    "url": "https://nbcfdc.gov.in/en/new-swarnima"
+    "url": "https://nbcfdc.gov.in/nbcfdc/web/en/loan-scheme-description"
   },
   {
     "scheme_id": "dr_ambedkar_scheme_hospitality",
@@ -437,6 +437,6 @@
     "active": true,
     "source_note": "Safai Karamcharis Support",
     "description": "The NSKFDC Rehabilitation Scheme provides concessional financial assistance, capital subsidies, and skill training for sanitation workers and their dependents to successfully transition into safe, dignified alternative livelihood ventures. It features a minimal 4% annual interest rate, 95% project cost coverage, and a 12-month moratorium to ensure sustainable income generation.",
-    "url": "https://nskfdc.nic.in/"
+    "url": "https://skillspedia.in/nskfdc-eoi-for-skill-development-training-of-manual-scavengers-under-namaste-scheme-by-nskfdc/"
   }
 ]

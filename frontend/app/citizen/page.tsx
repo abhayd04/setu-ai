@@ -69,6 +69,10 @@ export default function CitizenIntake() {
   const [uploadStatus, setUploadStatus] = useState<Record<string, any>>({});
   const [applicationStatus, setApplicationStatus] = useState<string | null>(null);
 
+  // Email draft states
+  const [emailDraft, setEmailDraft] = useState<any>(null);
+  const [emailSending, setEmailSending] = useState(false);
+
   const { isListening, error: voiceError, start, stop } = useVoiceInput(language);
   const t = (en: string, hi: string) => (language === "hi" ? hi : en);
 
@@ -257,6 +261,23 @@ export default function CitizenIntake() {
     }
   }
 
+  async function handleDraftEmail() {
+    if (!applicationId || !routing?.recommended_partner?.partner_id) return;
+    setEmailSending(true);
+    setErrorMsg(null);
+    try {
+      const res = await api.post("/api/partners/draft-email", {
+        application_id: applicationId,
+        partner_id: routing.recommended_partner.partner_id
+      });
+      setEmailDraft(res.data);
+    } catch (e: any) {
+      setErrorMsg(e?.response?.data?.detail || "Failed to draft partner email.");
+    } finally {
+      setEmailSending(false);
+    }
+  }
+
   const isFormIncomplete = missingFields.some((f) => !manualValues[f] || String(manualValues[f]).trim() === "");
 
   return (
@@ -421,7 +442,6 @@ export default function CitizenIntake() {
                   </ul>
 
                   <div className="flex flex-wrap items-center gap-3 pt-2">
-                    {/* Hides EMI for 100% grants and zero interest */}
                     {rec.interest_rate === 0 ? (
                       <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200/60">
                         {t("100% Financial Grant (No Repayment)", "100% वित्तीय अनुदान (कोई पुनर्भुगतान नहीं)")}
@@ -668,9 +688,57 @@ export default function CitizenIntake() {
                   </p>
                   
                   {applicationStatus === "SUBMITTED" ? (
-                    <div className="bg-teal-50 border border-teal-200 text-teal-900 rounded-2xl p-5 text-center shadow-sm space-y-1">
-                      <p className="font-bold text-base">{t("Application Submitted Successfully!", "आवेदन सफलतापूर्वक जमा कर दिया गया है!")}</p>
-                      <p className="text-xs text-teal-700">{t("Your application has been routed to the channel partner.", "आपका आवेदन चैनल पार्टनर को भेज दिया गया है।")}</p>
+                    <div className="space-y-4">
+                      <div className="bg-teal-50 border border-teal-200 text-teal-900 rounded-2xl p-5 text-center shadow-sm space-y-1">
+                        <p className="font-bold text-base">{t("Application Submitted Successfully!", "आवेदन सफलतापूर्वक जमा कर दिया गया है!")}</p>
+                        <p className="text-xs text-teal-700">{t("Your application has been saved to the system.", "आपका आवेदन सिस्टम में सहेज लिया गया है।")}</p>
+                      </div>
+                      
+                      {/* NEW: Email Draft Section */}
+                      {errorMsg && (
+                        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-3 text-xs font-semibold mb-3">
+                          ⚠️ {errorMsg}
+                        </div>
+                      )}
+
+                      {!emailDraft ? (
+                        <button 
+                          className="w-full bg-slate-800 hover:bg-slate-900 text-white rounded-xl py-3.5 font-semibold text-sm shadow-md transition-all flex justify-center gap-2 items-center"
+                          onClick={handleDraftEmail}
+                          disabled={emailSending}
+                        >
+                          ✉️ {emailSending ? t("Drafting Pitch...", "प्रस्ताव तैयार हो रहा है...") : t("Draft Partner Outreach Email", "पार्टनर आउटरीच ईमेल ड्राफ्ट करें")}
+                        </button>
+                      ) : (
+                        <div className="bg-white border border-slate-300 rounded-2xl p-4 shadow-sm space-y-3">
+                          <h4 className="font-bold text-slate-800 text-sm mb-2 pb-2 border-b border-slate-100 flex items-center gap-2">
+                            <span>📧</span> {t("Review Outreach Pitch", "प्रस्ताव की समीक्षा करें")}
+                          </h4>
+                          
+                          <div className="text-xs space-y-1.5 text-slate-600">
+                            <p><span className="font-semibold text-slate-700">To:</span> {emailDraft.partner_name} &lt;{emailDraft.partner_email}&gt;</p>
+                            <p><span className="font-semibold text-slate-700">Subject:</span> {emailDraft.subject}</p>
+                            <p><span className="font-semibold text-slate-700">Attachments:</span> {emailDraft.attached_documents.join(", ")}</p>
+                          </div>
+                          
+                          <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg">
+                            <p className="text-xs text-slate-700 whitespace-pre-wrap font-serif leading-relaxed">
+                              {emailDraft.body}
+                            </p>
+                          </div>
+                          
+                          <button 
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 mt-2 font-semibold text-sm shadow-md shadow-blue-500/20 transition-all"
+                            onClick={() => {
+                              const subject = encodeURIComponent(emailDraft.subject);
+                              const body = encodeURIComponent(emailDraft.body);
+                              window.open(`mailto:${emailDraft.partner_email}?subject=${subject}&body=${body}`);
+                            }}
+                          >
+                            {t("Escalate to Partner", "पार्टनर को भेजें")}
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <button 

@@ -9,6 +9,7 @@ class Partner(Base):
     partner_id = Column(String, primary_key=True)
     name = Column(String, nullable=False)
     partner_type = Column(String, nullable=False)   # "SCA" | "PSB" | "RRB" | "NBFC-MFI"
+    email = Column(String, nullable=True)           # <-- NEW FIELD
     lat = Column(Float, nullable=False)
     lng = Column(Float, nullable=False)
     district = Column(String, nullable=True)
