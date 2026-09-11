@@ -669,7 +669,7 @@ export default function CitizenIntake() {
                       
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/*,application/pdf,.pdf"
                         className="block mt-1 w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer transition-all border border-slate-200 rounded-xl bg-slate-50/50 p-1"
                         onChange={(e) => e.target.files?.[0] && handleUploadDocument(docType, e.target.files[0])}
                       />
@@ -732,7 +732,7 @@ export default function CitizenIntake() {
                             onClick={() => {
                               const subject = encodeURIComponent(emailDraft.subject);
                               const body = encodeURIComponent(emailDraft.body);
-                              window.open(`mailto:${emailDraft.partner_email}?subject=${subject}&body=${body}`);
+                              window.location.href = `mailto:${emailDraft.partner_email}?subject=${subject}&body=${body}`;
                             }}
                           >
                             {t("Escalate to Partner", "पार्टनर को भेजें")}
