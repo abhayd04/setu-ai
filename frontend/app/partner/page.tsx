@@ -44,24 +44,26 @@ export default function PartnerDashboard() {
     <main className="min-h-screen px-6 py-10 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold text-setu-navy mb-1">Channel Partner Dashboard</h1>
       <p className="text-gray-400 text-sm mb-6">
-        Prototype dashboard — no real partner authentication. Select a demo
-        partner ID (see backend/data/partners.json) to view applications
-        routed to them.
+        Prototype dashboard — select a partner branch to view applications routed to them.
       </p>
 
-      <div className="flex gap-3 mb-6">
+      {/* FIXED: Mobile Responsive Flex Container */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-6 w-full">
         <select
-          className="border rounded-lg p-2 text-sm flex-1"
+          className="border border-slate-200 rounded-xl p-3 text-sm flex-1 bg-white text-slate-800 shadow-sm"
           value={partnerId}
           onChange={(e) => setPartnerId(e.target.value)}
         >
-          <option value="sca_mp_indore">MP SCA — Indore Branch</option>
-          <option value="psb_sbi_indore_mg_road">SBI — MG Road, Indore</option>
-          <option value="rrb_narmada_jhabua_indore">Narmada Jhabua Gramin Bank — Indore</option>
-          <option value="nbfc_mfi_ujjivan_indore">Ujjivan (NBFC-MFI) — Indore</option>
-          <option value="sca_mp_bhopal">MP SCA — Bhopal Branch</option>
+          <option value="sca_mp_indore">MP State Cooperative Bank - Indore Central</option>
+          <option value="psb_sbi_indore_old_palasia">State Bank of India - Old Palasia</option>
+          <option value="rrb_mpgb_indore_sapna_sangeeta">Madhya Pradesh Gramin Bank - Sapna Sangeeta</option>
+          <option value="psb_boi_indore_rajendranagar">Bank of India - Rajendra Nagar</option>
+          <option value="nbfc_mfi_ujjivan_vijaynagar">Ujjivan Small Finance Bank - Vijay Nagar</option>
         </select>
-        <button className="bg-setu-navy text-white rounded-lg px-4 text-sm" onClick={loadApplications}>
+        <button 
+          className="bg-setu-navy hover:opacity-95 text-white rounded-xl px-5 py-3 sm:py-0 text-sm font-medium transition-all shadow-sm" 
+          onClick={loadApplications}
+        >
           {loading ? "Loading..." : "Load Applications"}
         </button>
       </div>

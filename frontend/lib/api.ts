@@ -1,8 +1,10 @@
 import axios from "axios";
 
+// Checks for local URL first, falls back to live Render backend for production
+const baseURL = process.env.NEXT_PUBLIC_API_URL || "https://setu-backend-hhsc.onrender.com";
+
 export const api = axios.create({
-  // Pointing back to live Render backend for production / GitHub push
-  baseURL: "https://setu-backend-hhsc.onrender.com/", 
+  baseURL: baseURL,
 });
 
 // Add typed wrapper functions here as endpoints come online, e.g.:

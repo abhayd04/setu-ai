@@ -68,6 +68,9 @@ export default function CitizenIntake() {
   const [checklist, setChecklist] = useState<any>(null);
   const [uploadStatus, setUploadStatus] = useState<Record<string, any>>({});
   const [applicationStatus, setApplicationStatus] = useState<string | null>(null);
+  
+  // NEW: Track which partner the user has explicitly selected from the list
+  const [activePartnerId, setActivePartnerId] = useState<string | null>(null);
 
   // Email draft states
   const [emailDraft, setEmailDraft] = useState<any>(null);
@@ -213,6 +216,8 @@ export default function CitizenIntake() {
         application_id: appId,
       });
       setRouting(routeRes.data);
+      // Automatically select the top recommendation by default
+      setActivePartnerId(routeRes.data.recommended_partner.partner_id);
       setApplicationStatus("PARTNER_RECOMMENDED");
 
       const checklistRes = await api.get(`/api/documents/checklist/${appId}`);
@@ -252,7 +257,10 @@ export default function CitizenIntake() {
     setLoading(true);
     setErrorMsg(null);
     try {
-      const res = await api.post(`/api/applications/${applicationId}/submit`);
+      // FIXED: Sending the selected partner_id to the backend so it assigns the application correctly!
+      const res = await api.post(`/api/applications/${applicationId}/submit`, {
+        partner_id: activePartnerId
+      });
       setApplicationStatus(res.data.status);
     } catch (e: any) {
       setErrorMsg(e?.response?.data?.detail || "Submission failed. Please check document validity.");
@@ -262,13 +270,14 @@ export default function CitizenIntake() {
   }
 
   async function handleDraftEmail() {
-    if (!applicationId || !routing?.recommended_partner?.partner_id) return;
+    // Rely on the actively selected partner instead of forcing the top recommendation
+    if (!applicationId || !activePartnerId) return;
     setEmailSending(true);
     setErrorMsg(null);
     try {
       const res = await api.post("/api/partners/draft-email", {
         application_id: applicationId,
-        partner_id: routing.recommended_partner.partner_id
+        partner_id: activePartnerId
       });
       setEmailDraft(res.data);
     } catch (e: any) {
@@ -319,7 +328,7 @@ export default function CitizenIntake() {
               disabled={!inputText.trim() || loading} 
               onClick={() => handleExtract(inputText)}
             >
-              {loading ? t("Processing...", "प्रोसेस हो रहा है...") : t("Submit", "जमा करें")}
+              {loading ? t("Processing...", "प्रोसेस हो रहा है...") : t("Submit", "ज जमा करें")}
             </button>
             <button 
               className={`px-6 py-3 rounded-xl font-semibold text-sm shadow-md transition-all ${isListening ? "bg-red-500 hover:bg-red-600 text-red-50 shadow-red-500/20 animate-pulse" : "bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/20"}`} 
@@ -560,7 +569,7 @@ export default function CitizenIntake() {
         <div className="space-y-4">
           {applicationStatus !== "SUBMITTED" && (
             <button 
-              onClick={() => { setSelectedScheme(null); setRouting(null); setChecklist(null); }}
+              onClick={() => { setSelectedScheme(null); setRouting(null); setChecklist(null); setActivePartnerId(null); }}
               className="text-xs font-semibold text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors"
             >
               ← {t("Back to Recommendations", "अनुशंसाओं पर वापस जाएं")}
@@ -587,11 +596,19 @@ export default function CitizenIntake() {
                 {t("Top Partner Options", "शीर्ष पार्टनर विकल्प")}
               </h3>
               
+              {/* NEW: Selectable partner cards with Google Maps links */}
               {[routing.recommended_partner, ...(routing.alternatives || []).filter((p: any) => p.is_eligible)]
                 .sort((a: any, b: any) => b.score - a.score)
                 .slice(0, 3)
-                .map((partner: any, index: number) => (
-                  <div key={partner.partner_id} className={`border rounded-xl p-4 space-y-2 ${index === 0 ? 'border-emerald-200/80 bg-emerald-50/40' : 'border-slate-200/80 bg-slate-50/50'}`}>
+                .map((partner: any, index: number) => {
+                  const isActive = activePartnerId === partner.partner_id;
+                  
+                  return (
+                  <div 
+                    key={partner.partner_id} 
+                    className={`border rounded-xl p-4 space-y-2 transition-all ${isActive ? 'border-blue-400 bg-blue-50/40 shadow-sm' : 'border-slate-200/80 bg-white/50 opacity-70 hover:opacity-100 cursor-pointer'}`} 
+                    onClick={() => setActivePartnerId(partner.partner_id)}
+                  >
                     <div className="flex justify-between items-start">
                       <div>
                         {index === 0 ? (
@@ -603,31 +620,45 @@ export default function CitizenIntake() {
                             {t("Alternative Option", "वैकल्पिक विकल्प")} {index}
                           </span>
                         )}
-                        <h3 className="font-bold text-slate-900 text-base">{partner.partner_name}</h3>
+                        <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
+                          {isActive && <span className="text-blue-600">✓</span>}
+                          {partner.partner_name}
+                        </h3>
                       </div>
-                      <span className="text-xs font-bold bg-white text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1 shadow-sm">
+                      <span className="text-xs font-bold bg-white text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1 shadow-sm shrink-0">
                         {t("Score", "स्कोर")}: {partner.score}
                       </span>
                     </div>
 
                     <p className="text-xs font-medium text-slate-500">
                       {partner.partner_type} · {partner.distance_km} km away · 
-                      NPA: <span className="font-semibold text-emerald-700">{((partner.npa_rate || 0.05) * 100).toFixed(1)}% (Healthy)</span> · 
-                      Remaining Quota: <span className="font-semibold text-emerald-700">{(100 - (partner.fund_utilization_pct || 65)).toFixed(0)}%</span>
+                      NPA: <span className="font-semibold text-emerald-700">{((partner.npa_rate || 0.05) * 100).toFixed(1)}% (Healthy)</span>
                     </p>
 
-                    <ul className="text-xs font-medium text-teal-700 space-y-1 pt-1">
-                      {partner.reasons?.map((r: string, i: number) => (
-                        <li key={i} className="flex items-center gap-1.5">✓ {r}</li>
-                      ))}
-                    </ul>
+                    <div className="flex justify-between items-center pt-2">
+                      <a 
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${partner.lat},${partner.lng}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors inline-block"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        📍 {t("Get Directions", "दिशा-निर्देश प्राप्त करें")}
+                      </a>
+                      
+                      {!isActive && (
+                        <button className="text-[11px] font-semibold text-slate-500 hover:text-slate-700 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm">
+                          {t("Select this Branch", "इस शाखा को चुनें")}
+                        </button>
+                      )}
+                    </div>
                   </div>
-              ))}
+                )})}
 
               {routing.closest_partner && routing.closest_partner.partner_id !== routing.recommended_partner.partner_id && (
                 <div className="mt-3 bg-amber-50/80 border border-amber-200 rounded-lg p-3 text-xs space-y-1">
                   <p className="font-bold text-amber-900 flex items-center gap-1">
-                    📍 {t("Why not the physically nearest branch?", "निकटतम शाखा क्यों नहीं चुनी गई?")}
+                    📍 {t("Why not the physically nearest branch?", "निकटतम शाखा क्यों প্রজাতন্ত্র नहीं चुनी गई?")}
                   </p>
                   <p className="text-amber-800">
                     <strong>{routing.closest_partner.partner_name}</strong> is closer ({routing.closest_partner.distance_km} km), 
@@ -694,7 +725,6 @@ export default function CitizenIntake() {
                         <p className="text-xs text-teal-700">{t("Your application has been saved to the system.", "आपका आवेदन सिस्टम में सहेज लिया गया है।")}</p>
                       </div>
                       
-                      {/* NEW: Email Draft Section */}
                       {errorMsg && (
                         <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-3 text-xs font-semibold mb-3">
                           ⚠️ {errorMsg}

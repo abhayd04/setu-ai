@@ -4,8 +4,9 @@
     "name": "MP State Cooperative Bank - Indore Central",
     "partner_type": "SCA",
     "email": "indore.central@mpcoopbank.in",
-    "lat": 22.7185,
-    "lng": 75.8550,
+    "address": "24, Maharani Road, Siyaganj, Indore, Madhya Pradesh 452007",
+    "lat": 22.722164200899453,
+    "lng": 75.86764952388964,
     "district": "Indore",
     "authorized_schemes": [
       "micro_finance_nsfdc",
@@ -35,12 +36,13 @@
     }
   },
   {
-    "partner_id": "psb_sbi_indore_palasia",
-    "name": "State Bank of India - Greater Palasia",
+    "partner_id": "psb_sbi_indore_old_palasia",
+    "name": "State Bank of India - Old Palasia",
     "partner_type": "PSB",
-    "email": "sbi.palasia@sbi.co.in",
-    "lat": 22.7250,
-    "lng": 75.8900,
+    "email": "sbi.03432@sbi.co.in",
+    "address": "10, Wadnere Compound, Old Palasia, Indore, Madhya Pradesh 452001",
+    "lat": 22.708923205898184,
+    "lng": 75.88236068123608,
     "district": "Indore",
     "authorized_schemes": [
       "term_loan_nsfdc",
@@ -67,12 +69,13 @@
     }
   },
   {
-    "partner_id": "rrb_narmada_jhabua_bhawarkua",
-    "name": "Madhya Pradesh Gramin Bank - Bhawarkua",
+    "partner_id": "rrb_mpgb_indore_sapna_sangeeta",
+    "name": "Madhya Pradesh Gramin Bank - Sapna Sangeeta",
     "partner_type": "RRB",
-    "email": "bhawarkua.branch@mpgb.in",
-    "lat": 22.6850,
-    "lng": 75.8600,
+    "email": "sapnasangeeta.branch@mpgb.in",
+    "address": "603, Sneh Nagar, Behind Lotus Showroom, Sapna Sangeeta Road, Indore, Madhya Pradesh 452001",
+    "lat": 22.70360248008943,
+    "lng": 75.87092328502816,
     "district": "Indore",
     "authorized_schemes": [
       "micro_finance_nsfdc",
@@ -102,8 +105,9 @@
     "name": "Bank of India - Rajendra Nagar",
     "partner_type": "PSB",
     "email": "rajendranagar@bankofindia.co.in",
-    "lat": 22.6700,
-    "lng": 75.8100,
+    "address": "2-B, Sector B, Rajendra Nagar, Indore, Madhya Pradesh 452012",
+    "lat": 22.672699578859362,
+    "lng": 75.82878253432108,
     "district": "Indore",
     "authorized_schemes": [
       "term_loan_nsfdc",
@@ -130,8 +134,9 @@
     "name": "Ujjivan Small Finance Bank - Vijay Nagar",
     "partner_type": "NBFC-MFI",
     "email": "vijaynagar.loans@ujjivan.com",
-    "lat": 22.7600,
-    "lng": 75.8950,
+    "address": "Plot No. 12, Scheme No. 54, Vijay Nagar, Indore, Madhya Pradesh 452010",
+    "lat": 22.755495391738968,
+    "lng": 75.89636939235677,
     "district": "Indore",
     "authorized_schemes": [
       "micro_finance_nsfdc",

@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
+from typing import Optional
 
 from app.db.session import get_db
 from app.schemas.application import ApplicationCreateRequest, ApplicationOut
@@ -39,8 +41,11 @@ def get_application(application_id: str, db: Session = Depends(get_db)):
 from app.models import Scheme, Document, Application
 from app.services.document_service import get_required_documents
 
+class SubmitApplicationRequest(BaseModel):
+    partner_id: Optional[str] = None
+
 @router.post("/{application_id}/submit")
-def submit_application(application_id: str, db: Session = Depends(get_db)):
+def submit_application(application_id: str, payload: Optional[SubmitApplicationRequest] = None, db: Session = Depends(get_db)):
     app_row = db.query(Application).filter(Application.application_id == application_id).first()
     if not app_row:
         raise HTTPException(status_code=404, detail="Application not found")
@@ -69,8 +74,9 @@ def submit_application(application_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=f"Missing required documents: {missing}")
 
     # 4. Mutate State and Route to Partner
-    # Since the UI already attached the partner in the PARTNER_RECOMMENDED stage,
-    # we just need to finalize the status so it appears on the Partner Dashboard.
+    if payload and payload.partner_id:
+        app_row.partner_id = payload.partner_id
+
     app_row.status = "SUBMITTED"  # Ensure this matches your Enum definition (e.g., ApplicationStatus.SUBMITTED if using Enums)
     db.commit()
 
