@@ -328,7 +328,7 @@ export default function CitizenIntake() {
               disabled={!inputText.trim() || loading} 
               onClick={() => handleExtract(inputText)}
             >
-              {loading ? t("Processing...", "प्रोसेस हो रहा है...") : t("Submit", "ज जमा करें")}
+              {loading ? t("Processing...", "प्रोसेस हो रहा है...") : t("Submit", "जमा करें")}
             </button>
             <button 
               className={`px-6 py-3 rounded-xl font-semibold text-sm shadow-md transition-all ${isListening ? "bg-red-500 hover:bg-red-600 text-red-50 shadow-red-500/20 animate-pulse" : "bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/20"}`} 

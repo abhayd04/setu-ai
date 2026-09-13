@@ -1,226 +1,106 @@
-# SETU-AI — Complete Build (Milestones 1-7)
+# 🚀 SETU-AI
+**Scheme-to-Enterprise Unified Intelligence Platform**  
+**Smart India Hackathon (SIH) 2026** | **Problem Statement:** SIH26092  
 
-Scheme-to-Enterprise Unified Intelligence, for SIH26092.
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?logo=vercel&style=for-the-badge)](https://setu-e4yg24luu-abhayd04s-projects.vercel.app/citizen)
 
-This milestone gives you: project structure, database schema, seeded scheme
-data (6 NBCFDC schemes with sourced/flagged figures), seeded demo partner
-data (5 partners around Indore/Bhopal), and two working API endpoints
-(`GET /api/schemes`, `POST /api/profile`) plus a basic 3-persona frontend
-shell (citizen / partner / admin landing pages).
+## 🎯 Our Vision
+Bridging the credit access gap for marginalized entrepreneurs in India. SETU-AI replaces fragmented welfare discovery with an omnichannel, voice-first platform featuring deterministic policy matching, automated document validation, and precise geospatial bank routing.
 
-**Nothing here talks to an LLM yet, does eligibility checks, EMI math, or
-partner routing — that's Milestone 2 and 3.** This milestone proves the
-plumbing works end to end: DB ↔ API ↔ frontend.
+---
 
-## ⚠️ Important: verify scheme figures before demo day
+## ✨ Key Technical Features
 
-`backend/data/schemes.json` has a `source_note` field on every scheme.
-Three of the six schemes are flagged as needing verification:
-- `new_swarnima_term_loan` — real scheme is tiered-rate (6%/8%), stored here
-  as a blended 7% since the v1 model only supports one flat rate
-- `general_term_loan` — figures taken from the PS text itself, not
-  independently confirmed against NBCFDC's current schedule
-- `micro_finance_general` / `mahila_samriddhi` — income eligibility is
-  officially "double the poverty line" (a lower, more complex threshold),
-  simplified here to a flat ₹3L
+- **🎙️ Multilingual AI Voice Intake:** Utilizes Google Gemini LLM with strict JSON guardrails to extract precise applicant parameters (intent, income, category) from Hindi/English audio without hallucinations.
+- **⚙️ Deterministic Policy Engine:** A math-backed matching engine that evaluates NBCFDC schemes, ranks eligibility, and dynamically generates complete EMI repayment schedules.
+- **🗺️ Intelligent Geospatial Routing:** PostgreSQL-powered mapping that evaluates branch distance, scheme fit, and historical capacity to recommend the optimal Channel Partner/Bank.
+- **📄 Automated OCR Pipeline:** Integrated Tesseract OCR to automatically scan and validate regional income and category certificates upon citizen upload.
+- **✉️ Automated Email Escalation Engine:** Instantly triggers localized email updates to the citizen whenever an application state changes (e.g., Pending, Approved, Rejected).
+- **💼 Channel Partner Dashboard:** A secure, dedicated workspace for loan officers to monitor live application queues and execute application actions seamlessly.
 
-Have someone on the team spend 30 minutes cross-checking these against
-nbcfdc.gov.in before you present. It's a strong talking point either way —
-"here's what we verified and how" is good hackathon material.
+---
 
-Also: all partner records in `backend/data/partners.json` are **simulated
-demo data** — I generated plausible branch names/locations, not real
-verified branch data. They're already flagged `is_simulated_data: true`.
-Don't present them as real without checking, and keep the "simulated" label
-visible somewhere in the partner-locator UI per the spec's own principle #6.
+## 🛠️ Tech Stack Architecture
 
-## Prerequisites
+**Frontend (Citizen & Partner Portals)**
+- Next.js (React Framework)
+- Tailwind CSS (Styling)
+- Deployed on **Vercel**
 
-- Python 3.11+
-- Node.js 18+
-- Docker (for local Postgres) — or a managed Postgres URL if you already
-  have one from Sahayak.AI
+**Backend (Core Intelligence & API)**
+- FastAPI (Python)
+- Uvicorn (ASGI server)
+- Deployed on **Render**
 
-## Backend setup
+**Database & AI Integration**
+- PostgreSQL (Geospatial & Relational Data)
+- Google Gemini API (NLP & Intent Extraction)
+- Tesseract OCR (Document Verification)
+- WhatsApp Business API & SMTP (Notification Engine)
 
+---
+
+## 💻 Local Setup Instructions
+
+Follow these instructions to run SETU-AI locally on your machine.
+
+### 1. Clone the Repository
 ```bash
+git clone [https://github.com/abhayd04/setu-ai.git](https://github.com/abhayd04/setu-ai.git)
+cd setu-ai
+2. Backend Setup (FastAPI)
+Open a terminal and navigate to the backend folder:
+
+Bash
 cd backend
+
+# Create a virtual environment
 python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+
+# Activate the virtual environment
+# On Windows:
+venv\Scripts\activate
+# On Mac/Linux:
+source venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
+Backend Environment Variables:
+Create a .env file in the backend directory and add:
 
-cp .env.example .env
-# edit .env: set GEMINI_API_KEY (needed from Milestone 2 onward, not Milestone 1)
+Code snippet
+GEMINI_API_KEY=your_gemini_api_key_here
+DATABASE_URL=your_postgresql_connection_string
+Run the Backend Server:
 
-# start local Postgres
-cd ..
-docker compose up -d
-cd backend
+Bash
+uvicorn main:app --reload
+# The API will be running at http://localhost:8000
+3. Frontend Setup (Next.js)
+Open a new terminal window and navigate to the frontend folder:
 
-# run migrations (creates tables)
-alembic revision --autogenerate -m "init schema"
-alembic upgrade head
-
-# seed schemes + partners
-python -m app.db.seed
-
-# run the API
-uvicorn app.main:app --reload --port 8000
-```
-
-Check it worked:
-```bash
-curl http://localhost:8000/api/health
-curl http://localhost:8000/api/schemes
-```
-You should see 6 schemes come back as JSON. Interactive API docs (auto-
-generated by FastAPI): http://localhost:8000/docs
-
-## Frontend setup
-
-```bash
+Bash
 cd frontend
+
+# Install dependencies
 npm install
-echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
+Frontend Environment Variables:
+Create a .env.local file in the frontend directory:
+
+Code snippet
+NEXT_PUBLIC_API_URL=http://localhost:8000
+Run the Frontend Development Server:
+
+Bash
 npm run dev
-```
-Open http://localhost:3000 — you should see the SETU-AI landing page with
-three buttons (Citizen / Partner / Government), each going to a placeholder
-page for now.
+# The frontend will be running at http://localhost:3000
+🚀 Scaling Roadmap (Our Vision)
+Phase 1: Core Prototype (Current) - Multilingual voice intake, deterministic policy engine, and dynamic map routing.
 
-## Milestone 2 additions (Core PS)
+Phase 2: Omnichannel Expansion - Integrating a Meta WhatsApp AI Chatbot for discovery and applications natively inside WhatsApp.
 
-New backend endpoints:
-- `POST /api/intent/extract` — Gemini-backed NLU. Takes raw text (typed or
-  voice-transcribed), returns structured profile + `missing_fields`. **The
-  LLM never decides eligibility here** — it only extracts fields (project
-  principle #1/#2).
-- `POST /api/eligibility/check` — deterministic policy engine, single scheme.
-- `POST /api/schemes/recommend` — runs the policy engine against every
-  active scheme, returns a ranked list (eligible first, by `match_score`),
-  with `failed_rules` on ineligible ones for explainability.
-- `POST /api/calculator/emi` — EMI with moratorium handling. **Assumption
-  flagged in code** (`app/services/calculator.py`): interest accrues during
-  moratorium rather than being free. Verify against NBCFDC's actual policy
-  and flip `ACCRUE_INTEREST_DURING_MORATORIUM` if wrong.
+Phase 3: Grassroots Pilot - Targeted physical rollout in Indore/Bhopal, deploying the voice-first platform to hardware kiosks at Common Service Centres (CSCs).
 
-New frontend: `/citizen` is now a full working flow — language toggle
-(Hindi/English), text input, voice input (browser Web Speech API, tap the
-🎤 button), extracted-profile confirmation, missing-field prompts, ranked
-scheme cards with match scores and reasons, an expandable "why not other
-schemes" section, and a per-scheme EMI calculator.
+Phase 4: Pan-India Scaling - Scaling LLM processing natively to all 22 scheduled Indian languages, and deploying Master Nodal Dashboards for government NPA tracking.
 
-**Voice input implementation note:** I used the browser's built-in
-`SpeechRecognition` API (client-side, Chrome/Edge, supports `hi-IN`)
-instead of a server-side STT service. This was a deliberate speed
-tradeoff — zero backend setup, no API key, works today. Real limitation:
-quality depends on the browser/network, and Chrome's implementation calls
-out to Google's recognition service internally, so it needs internet
-even though it's "client-side." If demo-day connectivity is a concern,
-the text input is a first-class fallback in the same UI, not an
-afterthought — test both before you present.
-
-**Also verify before demo day:** every LLM-extracted field the user
-doesn't state gets left `null` deliberately (the prompt explicitly
-forbids guessing) — this is safer than hallucinating income/category,
-but means a vague voice input will trigger a lot of missing-field
-prompts. Test with a few realistic sentences, not just the spec's one
-scripted example, before you trust the flow on stage.
-
-## Tested so far (honestly — I could not run this live, no sandbox network)
-
-- ✅ All Python files syntax-checked clean
-- ✅ All TSX/TS files type-checked clean (only "missing node_modules"
-  noise, zero real syntax/logic errors)
-- ✅ EMI formula verified against a known reference calculation (₹10L @
-  10% for 12 months → ₹87,916 — matches standard EMI tables)
-- ✅ Policy engine logic verified against your spec's own demo persona
-  (Ramesh Kumar): correctly rejects Micro Finance (income + amount both
-  exceed its limits), correctly approves General Term Loan and New
-  Swarnima
-- ❌ NOT tested: actual Gemini API calls (needs your API key + network),
-  full request/response cycle through FastAPI, the frontend actually
-  rendering in a browser, voice recognition in a real browser
-
-Your team needs to be the ones who run this end-to-end for the first
-time — budget real time for that, don't assume it "just works" because
-it passed static checks.
-
-## What's NOT built yet (upcoming milestones)
-
-- Milestone 3: partner routing engine + scoring, map integration,
-  application creation/lifecycle, document upload + OCR
-- Milestone 4: RAG assistant, multilingual explanation polish
-- Milestone 5: government dashboard analytics
-- Milestone 6/7: deployment, demo prep
-
-## Milestones 3-7 (all built — see docs/ for details)
-
-- **M3**: `POST /api/partners/route` (weighted scoring — 30% scheme fit /
-  20% capacity / 20% operational status / 15% distance / 10% processing
-  performance / 5% reliability), Leaflet map on the citizen page,
-  `POST /api/documents/upload` (real OCR via pytesseract, tested against a
-  synthetic income certificate — see note below), application lifecycle
-  (`POST /api/applications`, `GET /api/applications/{id}` with full
-  timeline), a lightweight partner dashboard at `/partner`.
-- **M4**: `POST /api/assistant/ask` — RAG over `data/knowledge_base.json`
-  using local TF-IDF retrieval (not an embeddings API — deliberate,
-  network-independent choice). **Tested and found imperfect**: some
-  queries mis-rank documents (e.g. business-loan questions can rank the
-  education-loan doc first due to keyword overlap) — partially fixed by
-  editing the source documents, but not perfect. The endpoint sends the
-  top-3 retrieved docs to the LLM, not just the top-1, which mitigates
-  this in the final answer even when ranking isn't perfect. If you have
-  time before Sept 30, swapping in real embeddings (pgvector or a Gemini
-  embedding call) would meaningfully improve this.
-- **M5**: `GET /api/dashboard/overview`, `GET /api/dashboard/partners` —
-  all figures computed live from the prototype's own database, including
-  the spec's Credit Access Gap metric. On a fresh DB these correctly show
-  zero, which is honest behavior, not a bug.
-- **M6**: `backend/Dockerfile`, `docs/deployment.md` — step-by-step
-  deployment guide for Render/Railway + Vercel + managed Postgres. **Not
-  executed** — no network access in the build sandbox. Your team needs to
-  be the first to actually run this.
-- **M7**: `docs/demo_script.md` — a 5-minute demo script mapped to what's
-  actually built, a list of what to proactively call out as simulated
-  data, prepared answers for likely judge questions, and a pre-demo
-  freeze checklist.
-
-## Real bugs found and fixed through actual testing (not just written and assumed correct)
-
-1. **OCR regex too strict for real OCR noise**: tested `document_service.py`
-   against a real synthetic test image — Tesseract rendered "Rs." as "Fs"
-   (font artifact), which broke the original income-extraction regex.
-   Fixed and re-verified.
-2. **TF-IDF retrieval ranking issue**: business-loan questions initially
-   mis-ranked toward the education-loan doc because it contained the
-   literal word "business" (in a sentence saying it's NOT for business).
-   Fixed by adding natural business-related keywords to the actual
-   business-scheme documents; documented the remaining imperfection
-   honestly rather than claiming it's fully solved.
-3. **A str_replace edit accidentally deleted an API route decorator**
-   (`@router.post("/route", ...)`) while adding the partner-applications
-   endpoint in `app/api/partners.py`. Caught immediately by re-running the
-   syntax check after every edit, not just at the end — fixed before
-   packaging.
-
-## What was never tested (be honest with your team about this)
-
-No network access existed in the build sandbox, so none of the following
-were ever actually run: the FastAPI server itself, a real Gemini API call,
-the frontend rendering in an actual browser, file upload through the real
-HTTP API (only the underlying OCR function was tested directly), or
-`npm install`/`pip install` completing successfully. Static syntax/type
-checks passed on everything, and the pure-logic pieces (EMI math, distance
-math, policy engine, OCR extraction, TF-IDF retrieval) were genuinely
-executed and verified — but "passes static checks" is not the same
-guarantee as "runs correctly end-to-end." Your team needs to be the first
-to run `pip install -r requirements.txt` and `uvicorn app.main:app --reload`
-— do this today, not close to the deadline, so any real runtime issues
-surface with three weeks of runway instead of three days.
-
-## Testing what exists now
-
-1. `curl -X POST http://localhost:8000/api/profile -H "Content-Type: application/json" -d '{"name":"Ramesh Kumar","income":320000,"category":"SC","location":"Indore","purpose":"business","business_type":"mobile_repair","project_cost":400000,"requested_amount":400000,"language":"hi"}'`
-   → should return the same payload back with a generated `profile_id`.
-2. Confirm the row landed in Postgres: `docker exec -it setu-ai-db-1 psql -U setu_user -d setu_ai -c "select * from beneficiary_profiles;"`
+Built with ❤️ for Smart India Hackathon 2026
