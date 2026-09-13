@@ -2,7 +2,7 @@
 **Scheme-to-Enterprise Unified Intelligence Platform**  
 **Smart India Hackathon (SIH) 2026** | **Problem Statement:** SIH26092  
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?logo=vercel&style=for-the-badge)](https://setu-e4yg24luu-abhayd04s-projects.vercel.app/citizen)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?logo=vercel&style=for-the-badge)](https://setu-ai-tau.vercel.app/)
 
 ## 🎯 Our Vision
 Bridging the credit access gap for marginalized entrepreneurs in India. SETU-AI replaces fragmented welfare discovery with an omnichannel, voice-first platform featuring deterministic policy matching, automated document validation, and precise geospatial bank routing.
